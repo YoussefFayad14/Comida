@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../widgets/SocialButton.dart';
+import 'HomeScreen.dart';
 import 'OnboardingScreen.dart';
 
 class LoginScreen extends StatelessWidget {
@@ -128,11 +129,19 @@ class LoginScreen extends StatelessWidget {
                             horizontal: 100, vertical: 16),
                         shape: StadiumBorder(),
                       ),
-                      child: Text(
-                        "Login",
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 18
+                      child:GestureDetector(
+                        onTap: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => HomeScreen()),
+                          );
+                        },
+                        child: Text(
+                          "Log In",
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 18
+                          ),
                         ),
                       ),
                     ),
