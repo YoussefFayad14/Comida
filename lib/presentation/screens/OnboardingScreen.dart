@@ -3,23 +3,9 @@ import 'package:flutter/material.dart';
 import '../widgets/LoginButton.dart';
 import '../widgets/SignUpButton.dart';
 
-void main() {
-  runApp(MyApp());
-}
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: OnboadingScreen(),
-    );
-  }
-}
-
-class OnboadingScreen extends StatelessWidget {
-  const OnboadingScreen({super.key});
+class OnboardingScreen extends StatelessWidget {
+  const OnboardingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -63,8 +49,8 @@ class OnboadingScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      SignUpButton(),
-                      LoginButton(),
+                      SignUpButton(context),
+                      LoginButton(context),
                     ],
                   ),
                 ],
