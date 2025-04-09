@@ -1,5 +1,5 @@
+import 'package:comida_app/presentation/screens/OnboardingScreen.dart';
 import 'package:flutter/material.dart';
-import 'home_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -24,7 +24,7 @@ class SplashScreen extends StatelessWidget {
     Future.delayed(Duration(seconds: 5), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => HomeScreen()),
+        MaterialPageRoute(builder: (context) => OnboadingScreen()),
       );
     });
 
