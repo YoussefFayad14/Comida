@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'util/app_routes.dart';
-import 'util/router_generator.dart';
+import 'util/AppRoutes.dart';
+import 'util/RouterGenerator.dart';
 
 void main() {
   runApp(MyApp());
