@@ -23,7 +23,7 @@ class OfferCardWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 300,
+      width: 350,
       child: Card(
         color: cardColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
@@ -36,7 +36,7 @@ class OfferCardWidget extends StatelessWidget {
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(12),
-                child: Image.asset(
+                child: Image.network(
                   imagePath,
                   width: 100,
                   height: 150,
@@ -63,7 +63,7 @@ class OfferCardWidget extends StatelessWidget {
                     ),
                     SizedBox(height: 4),
                     Text(
-                      itemName,
+                      itemName.split(' ').take(2).join(' '),
                       style: TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.bold,

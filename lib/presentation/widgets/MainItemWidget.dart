@@ -37,7 +37,7 @@ class MainItemWidget extends StatelessWidget {
               margin: EdgeInsets.only(bottom: isSelected ? 16 : 0),
               child: CircleAvatar(
                 radius: 35,
-                backgroundImage: AssetImage(imagePath),
+                backgroundImage: NetworkImage(imagePath),
               ),
             ),
             AnimatedDefaultTextStyle(
