@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../util/SharedPreferencesHelper.dart';
+import '../screens/LoginScreen.dart';
 import 'ProfileWithBadgeWidget.dart';
 
 class DeliveryAddressWidget extends StatelessWidget {
@@ -53,10 +55,19 @@ class DeliveryAddressWidget extends StatelessWidget {
             ],
           ),
           Spacer(),
-          ProfileWithBadge(
-            image: AssetImage('assets/images/profile.png'),
-            badgeCount: 3,
-          )
+          GestureDetector(
+            onTap: () async{
+              await SharedPreferencesHelper.setIsLog(false);
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => LoginScreen()),
+              );
+            },
+            child: ProfileWithBadge(
+              image: AssetImage('assets/images/profile.png'),
+              badgeCount: 3,
+            )
+          ),
         ],
       ),
     );

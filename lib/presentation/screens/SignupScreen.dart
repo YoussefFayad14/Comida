@@ -1,12 +1,18 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import '../../data/local/DatabaseHelper.dart';
+import '../../util/SharedPreferencesHelper.dart';
 import '../widgets/SocialButton.dart';
 import 'HomeScreen.dart';
 import 'LoginScreen.dart';
 import 'OnboardingScreen.dart';
 
 class SignupScreen extends StatelessWidget {
-  const SignupScreen({super.key});
+  SignupScreen({super.key});
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final DatabaseHelper databaseHelper = DatabaseHelper();
 
   @override
   Widget build(BuildContext context) {
@@ -83,6 +89,7 @@ class SignupScreen extends StatelessWidget {
                   Text("Full Name", style: TextStyle(fontWeight: FontWeight.bold)),
                   SizedBox(height: 8),
                   TextField(
+                    controller: nameController,
                     decoration: InputDecoration(
                       hintText: "Ahmed Mohamed",
                       filled: true,
@@ -97,6 +104,7 @@ class SignupScreen extends StatelessWidget {
                   Text("Email", style: TextStyle(fontWeight: FontWeight.bold)),
                   SizedBox(height: 8),
                   TextField(
+                    controller: emailController,
                     decoration: InputDecoration(
                       hintText: "example@gmail.com",
                       filled: true,
@@ -107,12 +115,12 @@ class SignupScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-
                   SizedBox(height: 16),
                   Text("Password",
                       style: TextStyle(fontWeight: FontWeight.bold)),
                   SizedBox(height: 8),
                   TextField(
+                    controller: passwordController,
                     obscureText: true,
                     decoration: InputDecoration(
                       hintText: "••••••••••",
@@ -136,11 +144,35 @@ class SignupScreen extends StatelessWidget {
                         shape: StadiumBorder(),
                       ),
                       child:GestureDetector(
-                        onTap: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(builder: (context) => HomeScreen()),
+                        onTap: () async {
+                          // Insert user to database
+                          var result = await databaseHelper.insertUser(
+                            nameController.text,
+                            emailController.text,
+                            passwordController.text,
                           );
+                          if (result == -1) {
+                            // Show error message
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text("Error inserting user"),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                          }else {
+                            // Show success message
+                            // await SharedPreferencesHelper.setIsLog(true);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text("User inserted successfully"),
+                                backgroundColor: Colors.green,
+                              ),
+                            );
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(builder: (context) => LoginScreen()),
+                            );
+                          }
                         },
                         child: Text(
                           "Sign Up",
