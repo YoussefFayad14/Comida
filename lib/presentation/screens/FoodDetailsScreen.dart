@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../data/local/DatabaseHelper.dart';
 import '../../data/models/MealsResponse.dart';
 import '../../data/remote/ApiService.dart';
 import '../widgets/BottomSheetItems.dart';
@@ -18,6 +19,7 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
   int itemCount = 1;
   final double itemPrice = 100;
   late Future<MealsResponse> meal;
+  final DatabaseHelper databaseHelper = DatabaseHelper();
 
 
   @override
@@ -61,10 +63,30 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                         },
                       ),
                       IconButton(
-                        icon: const Icon(Icons.favorite_sharp),
+                        icon: const Icon(Icons.favorite),
                         color: Colors.orange,
                         onPressed: () {
-                          print('Heart icon pressed');
+                          var result = databaseHelper.insertOrder(
+                            mealData.strMeal ?? 'Meal Name',
+                            mealData.strCategory ?? 'Category',
+                            mealData.strMealThumb ?? 'Meal Image',
+                            1,
+                          );
+                          if(result == -1){
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text("Error inserting order"),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                          }else{
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text("Order inserted successfully"),
+                                backgroundColor: Colors.green,
+                              ),
+                            );
+                          }
                         },
                       ),
                     ],

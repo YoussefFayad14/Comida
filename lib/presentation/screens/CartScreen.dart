@@ -1,15 +1,31 @@
 import 'package:flutter/material.dart';
+import '../../data/local/DatabaseHelper.dart';
 import '../widgets/CartItemWidget.dart';
 import '../widgets/SummaryRow.dart';
+import 'HomeScreen.dart';
 
-void main() {
-  runApp(MaterialApp(
-    home: CartScreen(),
-  ));
+class CartScreen extends StatefulWidget {
+  const CartScreen({super.key});
+
+  @override
+  State<CartScreen> createState() => _CartScreenState();
 }
 
-class CartScreen extends StatelessWidget {
-  const CartScreen({super.key});
+class _CartScreenState extends State<CartScreen> {
+  late Future<List<Map<String, dynamic>>> orders;
+
+  @override
+  void initState() {
+    super.initState();
+    orders = DatabaseHelper().getAllOrders();
+  }
+
+  void removeOrder(int id, int index) async {
+    await DatabaseHelper().deleteOrder(id);
+    setState(() {
+      orders = DatabaseHelper().getAllOrders();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,34 +37,55 @@ class CartScreen extends StatelessWidget {
           Row(
             children: [
               SizedBox(width: 10),
-              Icon(
-                  Icons.arrow_back_ios,
-                  color: Colors.black
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => HomeScreen()),
+                  );
+                },
+                child: Icon(Icons.arrow_back_ios, color: Colors.black),
               ),
               Spacer(),
               Text(
                 "Cart",
-                style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold
-                ),
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               Spacer(),
               SizedBox(width: 24),
             ],
           ),
           SizedBox(height: 24),
-          CartItemWidget(
-            image: 'assets/images/pizza2.png',
-            name: 'Pizza margarita\nEuropean',
-            price: 9.00,
-            quantity: 2,
-          ),
-          CartItemWidget(
-            image: 'assets/images/pasta.png',
-            name: 'Spaghetti with\nshrimp and basil',
-            price: 15.30,
-            quantity: 2,
+          FutureBuilder<List<Map<String, dynamic>>>(
+            future: orders,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return Center(child: CircularProgressIndicator());
+              } else if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                return Center(child: Text('No items in the cart.'));
+              } else {
+                List<Map<String, dynamic>> orders = snapshot.data!;
+                return Expanded(
+                  child: ListView.builder(
+                    itemCount: orders.length,
+                    itemBuilder: (context, index) {
+                      return CartItemWidget(
+                        image: orders[index]['image_path'],
+                        name: orders[index]['item_name'],
+                        category: orders[index]['item_category'],
+                        quantity: orders[index]['quantity'],
+                        onDelete: () {
+                          removeOrder(orders[index]['id'], index);
+                        },
+
+                      );
+                    },
+                  ),
+                );
+              }
+            },
           ),
           SizedBox(height: 20),
           Row(
@@ -78,14 +115,10 @@ class CartScreen extends StatelessWidget {
                   ),
                 ),
                 child: Padding(
-                  padding:
-                  EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                   child: Text(
-                      "Add",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16
-                    ),
+                    "Add",
+                    style: TextStyle(color: Colors.white, fontSize: 16),
                   ),
                 ),
               ),
@@ -106,11 +139,13 @@ class CartScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                    "Delivery Address",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                        color: Colors.white)),
+                  "Delivery Address",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 16,
+                    color: Colors.white,
+                  ),
+                ),
                 SizedBox(height: 8),
                 Text(
                   "Avinguda Meridiana, 350, 358, 08027\nBarcelona",
@@ -126,9 +161,10 @@ class CartScreen extends StatelessWidget {
                     Text(
                       "\$17.30",
                       style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 22),
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 22,
+                      ),
                     ),
                     Spacer(),
                     ElevatedButton(
@@ -140,24 +176,23 @@ class CartScreen extends StatelessWidget {
                         ),
                       ),
                       child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 24, vertical: 14),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 24,
+                          vertical: 14,
+                        ),
                         child: Text(
-                            "Go to checkout",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16
-                          ),
+                          "Go to checkout",
+                          style: TextStyle(color: Colors.white, fontSize: 16),
                         ),
                       ),
                     ),
                   ],
-                )
+                ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );
   }
 }
-

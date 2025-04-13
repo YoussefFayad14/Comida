@@ -18,9 +18,24 @@ class DatabaseHelper {
 
     return await openDatabase(
       path,
-      version: 1,
+      version: 2,
       onCreate: _onCreate,
+      onUpgrade: _onUpgrade,
     );
+  }
+
+  Future<void> _onUpgrade(Database db, int oldVersion, int newVersion) async {
+    if (oldVersion < 2) {
+      await db.execute(''' 
+        CREATE TABLE orders (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          item_name TEXT NOT NULL,
+          item_category TEXT Not NULL,
+          image_path TEXT NOT NULL,
+          quantity INTEGER  NULL,
+        )
+      ''');
+    }
   }
 
   // Create tables
@@ -74,6 +89,47 @@ class DatabaseHelper {
       where: 'email = ?',
       whereArgs: [email],
     );
+  }
+
+  // Insert order
+  Future<int> insertOrder(String itemName,String itemCategory, String imagePath, int quantity) async {
+    final db = await database;
+    return await db.insert(
+      'orders',
+      {
+        'item_name': itemName,
+        'item_category': itemCategory,
+        'image_path': imagePath,
+        'quantity': quantity,
+      },
+      conflictAlgorithm: ConflictAlgorithm.replace,
+    );
+  }
+
+  // Get orders by user
+  Future<List<Map<String, dynamic>>> getOrdersByUser(int userId) async {
+    final db = await database;
+    return await db.query(
+      'orders',
+      where: 'user_id = ?',
+      whereArgs: [userId],
+    );
+  }
+
+  // Delete order by id
+  Future<int> deleteOrder(int orderId) async {
+    final db = await database;
+    return await db.delete(
+      'orders',
+      where: 'id = ?',
+      whereArgs: [orderId],
+    );
+  }
+
+  // Get all orders
+  Future<List<Map<String, dynamic>>> getAllOrders() async {
+    final db = await database;
+    return await db.query('orders');
   }
 
 }
