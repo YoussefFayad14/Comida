@@ -5,6 +5,7 @@ import 'package:comida_app/presentation/screens/SplashScreen.dart';
 import 'package:flutter/material.dart';
 import '../presentation/screens/CartScreen.dart';
 import '../presentation/screens/FoodDetailsScreen.dart';
+import '../presentation/screens/SignupScreen.dart';
 import 'AppRoutes.dart';
 
 
@@ -19,6 +20,8 @@ class RouterGenerator {
         return MaterialPageRoute(builder: (_) => HomeScreen());
       case AppRoutes.login:
         return MaterialPageRoute(builder: (_) => LoginScreen());
+      case AppRoutes.signup:
+        return MaterialPageRoute(builder: (_) => SignupScreen());
       case AppRoutes.foodDetails:
         final String idMeal = settings.arguments as String;
         return MaterialPageRoute(builder: (_) => FoodDetailsScreen(id: idMeal));

@@ -9,6 +9,7 @@ import '../widgets/OfferItemCardWidget.dart';
 import '../widgets/RestaurantItemCardWidget.dart';
 import '../widgets/SearchBarWidget.dart';
 import '../widgets/SectionTitleRow.dart';
+import 'FoodDetailsScreen.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -133,12 +134,14 @@ class _HomeScreenState extends State<HomeScreen> {
                               freeDelivery: false,
                               price: 100,
                               cardColor: Colors.redAccent,
+                              heroTag: mealsList[index].idMeal,
                               onBuyPressed: () {
                                 print("Buy pressed for ${mealsList[index].idMeal}");
-                                Navigator.pushNamed(
+                                Navigator.push(
                                 context,
-                                '/foodDetails',
-                                arguments: mealsList[index].idMeal
+                                  MaterialPageRoute(
+                                    builder: (context) => FoodDetailsScreen(id: mealsList[index].idMeal)
+                                  )
                                 );
                               },
                             );
