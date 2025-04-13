@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
-Widget SignUpButton(BuildContext context) {
+import '../screens/SignupScreen.dart';
+
+Widget SignupButton(BuildContext context) {
   return OutlinedButton(
     style: OutlinedButton.styleFrom(
       foregroundColor: Colors.white,
@@ -11,10 +13,10 @@ Widget SignUpButton(BuildContext context) {
       ),
     ),
     onPressed: () {
-     /* Navigator.pushReplacement(
+     Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => LoginScreen()),
-      );*/
+        MaterialPageRoute(builder: (context) => SignupScreen()),
+      );
     },
     child: Text(
       "Sign Up",

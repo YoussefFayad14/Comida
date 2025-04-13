@@ -49,7 +49,7 @@ class OnboardingScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      SignUpButton(context),
+                      SignupButton(context),
                       LoginButton(context),
                     ],
                   ),

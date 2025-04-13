@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../data/models/MealsResponse.dart';
 import '../../data/remote/ApiService.dart';
+import '../widgets/BottomSheetItems.dart';
+import '../widgets/FoodDetailsItemTag.dart';
 import 'HomeScreen.dart';
 
 class FoodDetailsScreen extends StatefulWidget {
@@ -68,13 +70,16 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                     ],
                   ),
                   Center(
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(24),
-                      child: Image.network(
-                        mealData.strMealThumb ?? 'Meal Image',
-                        width: 250,
-                        height: 250,
-                        fit: BoxFit.cover,
+                    child: Hero(
+                      tag: widget.id,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(24),
+                        child: Image.network(
+                          mealData.strMealThumb ?? 'Meal Image',
+                          width: 250,
+                          height: 250,
+                          fit: BoxFit.cover,
+                        ),
                       ),
                     ),
                   ),
@@ -106,9 +111,9 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                   const SizedBox(height: 12),
                   Row(
                     children: [
-                      _itemTag('Free delivery', 'assets/images/delivery_icon.png'),
+                      itemTag('Free delivery', 'assets/images/delivery_icon.png'),
                       const SizedBox(width: 16),
-                      _itemTag('45 mins', 'assets/images/clock_icon.png'),
+                      itemTag('45 mins', 'assets/images/clock_icon.png'),
                       const Spacer(),
                       Image.asset(
                         'assets/images/star_icon.png',
@@ -220,63 +225,6 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
     );
   }
 
-  Widget _itemTag(String text, String imagePath) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        Image.asset(
-          imagePath,
-          width: 20,
-          height: 20,
-        ),
-        const SizedBox(width: 6),
-        Text(
-          text,
-          style: const TextStyle(
-            fontSize: 14,
-            color: Colors.black87,
-          ),
-        ),
-      ],
-    );
-  }
-
-
-  Widget _itemBottomSheet(String text, bool isSelected, String imagePath) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8),
-      child: Row(
-        children: [
-          Image.asset(
-            imagePath,
-            width: 24,
-            height: 24,
-          ),
-          const SizedBox(width: 12),
-          Text(
-            text,
-            style: const TextStyle(
-              fontSize: 20,
-              color: Colors.white
-            ),
-          ),
-          const Spacer(),
-          isSelected
-              ? Icon(
-            isSelected ? Icons.radio_button_checked : Icons.radio_button_unchecked,
-            color: isSelected ? Colors.orange : Colors.grey,
-            size: 24,
-          )
-              : Icon(
-            isSelected ? Icons.radio_button_checked : Icons.radio_button_unchecked_outlined,
-            color: isSelected ? Colors.orange : Colors.grey,
-            size: 24,
-          ),
-        ],
-      ),
-    );
-  }
-
   void _showBottomSheet() {
     showModalBottomSheet(
       context: context,
@@ -306,9 +254,9 @@ class _FoodDetailsScreenState extends State<FoodDetailsScreen> {
                   ),
                 ),
                 const SizedBox(height: 12),
-                _itemBottomSheet('Olives', true,"assets/images/itemOne.png"),
-                _itemBottomSheet('Cheese', false,"assets/images/itemTwo.png"),
-                _itemBottomSheet('Mushroom', false,"assets/images/itemThree.png"),
+                itemBottomSheet('Olives', true,"assets/images/itemOne.png"),
+                itemBottomSheet('Cheese', false,"assets/images/itemTwo.png"),
+                itemBottomSheet('Mushroom', false,"assets/images/itemThree.png"),
                 const SizedBox(height: 12),
               ],
             ),

@@ -8,6 +8,7 @@ class OfferCardWidget extends StatelessWidget {
   final double price;
   final VoidCallback onBuyPressed;
   final Color cardColor;
+  final String heroTag;
 
   const OfferCardWidget({
     super.key,
@@ -17,6 +18,7 @@ class OfferCardWidget extends StatelessWidget {
     required this.freeDelivery,
     required this.price,
     required this.onBuyPressed,
+    required this.heroTag,
     this.cardColor = Colors.redAccent,
   });
 
@@ -34,13 +36,16 @@ class OfferCardWidget extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: Image.network(
-                  imagePath,
-                  width: 100,
-                  height: 150,
-                  fit: BoxFit.cover,
+              Hero(
+                  tag: heroTag,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.network(
+                      imagePath,
+                      width: 100,
+                      height: 150,
+                      fit: BoxFit.cover,
+                    ),
                 ),
               ),
               SizedBox(width: 12),

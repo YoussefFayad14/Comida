@@ -2,11 +2,11 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import '../widgets/SocialButton.dart';
 import 'HomeScreen.dart';
+import 'LoginScreen.dart';
 import 'OnboardingScreen.dart';
-import 'SignupScreen.dart';
 
-class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+class SignupScreen extends StatelessWidget {
+  const SignupScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -70,16 +70,30 @@ class LoginScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text("Login",
+                  Text("Sign Up",
                       style: TextStyle(
                           fontSize: 28,
                           fontWeight: FontWeight.bold,
                           color: Colors.black)),
                   SizedBox(height: 8),
-                  Text("Please sign in to your existing account",
+                  Text("Please enter your details to create account",
                       style: TextStyle(color: Colors.grey)),
 
                   SizedBox(height: 24),
+                  Text("Full Name", style: TextStyle(fontWeight: FontWeight.bold)),
+                  SizedBox(height: 8),
+                  TextField(
+                    decoration: InputDecoration(
+                      hintText: "Ahmed Mohamed",
+                      filled: true,
+                      fillColor: Color(0xFFF6F6F6),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(16),
+                        borderSide: BorderSide.none,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 16),
                   Text("Email", style: TextStyle(fontWeight: FontWeight.bold)),
                   SizedBox(height: 8),
                   TextField(
@@ -111,16 +125,6 @@ class LoginScreen extends StatelessWidget {
                       ),
                     ),
                   ),
-
-                  SizedBox(height: 10),
-                  Align(
-                    alignment: Alignment.center,
-                    child: Text(
-                      "Forgot Password",
-                      style: TextStyle(color: Colors.redAccent),
-                    ),
-                  ),
-
                   SizedBox(height: 20),
                   Center(
                     child: ElevatedButton(
@@ -139,7 +143,7 @@ class LoginScreen extends StatelessWidget {
                           );
                         },
                         child: Text(
-                          "Log In",
+                          "Sign Up",
                           style: TextStyle(
                               color: Colors.white,
                               fontSize: 18
@@ -150,7 +154,7 @@ class LoginScreen extends StatelessWidget {
                   ),
 
                   SizedBox(height: 20),
-                  Center(child: Text("Or login with")),
+                  Center(child: Text("Or Sign Up with")),
                   SizedBox(height: 12),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -163,17 +167,17 @@ class LoginScreen extends StatelessWidget {
                   Center(
                     child: RichText(
                       text: TextSpan(
-                        text: "Don’t have an account? ",
+                        text: "Already have an account? ",
                         style: TextStyle(color: Colors.black),
                         children: [
                           TextSpan(
-                            text: "Sign Up",
+                            text: "Log In",
                             style: TextStyle(color: Colors.red),
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
                                 Navigator.pushReplacement(
                                   context,
-                                  MaterialPageRoute(builder: (context) => SignupScreen()),
+                                  MaterialPageRoute(builder: (context) => LoginScreen()),
                                 );
                               },
                           ),
