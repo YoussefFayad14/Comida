@@ -1,12 +1,18 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import '../../data/local/DatabaseHelper.dart';
+import '../../util/SharedPreferencesHelper.dart';
 import '../widgets/SocialButton.dart';
 import 'HomeScreen.dart';
 import 'OnboardingScreen.dart';
 import 'SignupScreen.dart';
 
 class LoginScreen extends StatelessWidget {
-  const LoginScreen({super.key});
+  LoginScreen({super.key});
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final DatabaseHelper databaseHelper = DatabaseHelper();
+
 
   @override
   Widget build(BuildContext context) {
@@ -132,11 +138,33 @@ class LoginScreen extends StatelessWidget {
                         shape: StadiumBorder(),
                       ),
                       child:GestureDetector(
-                        onTap: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(builder: (context) => HomeScreen()),
+                        onTap: () async{
+                          var result = databaseHelper.getUser(
+                            emailController.text,
+                            passwordController.text,
                           );
+                          if (result == -1) {
+                            // Show error message
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text("Error user is not found"),
+                                backgroundColor: Colors.red,
+                              ),
+                            );
+                          }else {
+                            // Show success message
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(
+                                content: Text("Login successfully"),
+                                backgroundColor: Colors.green,
+                                ),
+                            );
+                            await SharedPreferencesHelper.setIsLog(true);
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(builder: (context) => HomeScreen()),
+                            );
+                          };
                         },
                         child: Text(
                           "Log In",
