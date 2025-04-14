@@ -3,15 +3,17 @@ import 'package:flutter/material.dart';
 class CartItemWidget extends StatelessWidget {
   final String image;
   final String name;
-  final double price;
+  final String category;
   final int quantity;
+  final VoidCallback  onDelete;
 
   const CartItemWidget({
     super.key,
     required this.image,
     required this.name,
-    required this.price,
+    required this.category,
     required this.quantity,
+    required this.onDelete,
   });
 
   @override
@@ -22,18 +24,19 @@ class CartItemWidget extends StatelessWidget {
         children: [
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
-            child: Image.asset(image, width: 60, height: 60, fit: BoxFit.cover),
+            child: Image.network(image, width: 60, height: 60, fit: BoxFit.cover),
           ),
           SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(name,
-                    style:
-                    TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
+                Text(
+                    name,
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16)),
                 SizedBox(height: 4),
-                Text("\$${price.toStringAsFixed(2)}",
+                Text(
+                    category,
                     style: TextStyle(color: Colors.red, fontSize: 14)),
               ],
             ),
@@ -49,7 +52,12 @@ class CartItemWidget extends StatelessWidget {
             ],
           ),
           SizedBox(width: 8),
-          Icon(Icons.close, color: Colors.red),
+          GestureDetector(
+            onTap: () {
+              onDelete();
+            },
+            child: Icon(Icons.close, color: Colors.red),
+          ),
         ],
       ),
     );

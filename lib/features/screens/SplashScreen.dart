@@ -1,18 +1,42 @@
-import 'package:comida_app/presentation/screens/OnboardingScreen.dart';
 import 'package:flutter/material.dart';
+import '../../util/SharedPreferencesHelper.dart';
+import 'HomeScreen.dart';
+import 'OnboardingScreen.dart';
 
-class SplashScreen extends StatelessWidget {
+class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    Future.delayed(Duration(seconds: 5), () {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => OnboardingScreen()),
-      );
-    });
+  State<SplashScreen> createState() => _SplashScreenState();
+}
 
+class _SplashScreenState extends State<SplashScreen> {
+  @override
+  void initState() {
+    super.initState();
+    _loadIsLog();
+  }
+
+  void _loadIsLog() async {
+    bool isLog = await SharedPreferencesHelper.getIsLog();
+
+    Future.delayed(Duration(seconds: 5), () {
+      if (isLog) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomeScreen()),
+        );
+      } else {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => OnboardingScreen()),
+        );
+      }
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFFF6B57),
       body: Stack(
@@ -49,5 +73,3 @@ class SplashScreen extends StatelessWidget {
     );
   }
 }
-
-

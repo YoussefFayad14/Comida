@@ -1,10 +1,17 @@
 import 'package:flutter/material.dart';
+import '../../util/SharedPreferencesHelper.dart';
+import '../screens/LoginScreen.dart';
 import 'ProfileWithBadgeWidget.dart';
 
 class DeliveryAddressWidget extends StatelessWidget {
   final String address;
+  final VoidCallback onMenuTap;
 
-  const DeliveryAddressWidget({super.key, required this.address});
+  const DeliveryAddressWidget({
+    super.key,
+    required this.address,
+    required this.onMenuTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -12,10 +19,13 @@ class DeliveryAddressWidget extends StatelessWidget {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(
-            Icons.menu_sharp,
-            color: Colors.black,
-            size: 32,
+          GestureDetector(
+            onTap: onMenuTap,
+              child: Icon(
+              Icons.menu_sharp,
+              color: Colors.black,
+              size: 32,
+            ),
           ),
           Spacer(),
           Column(
@@ -53,10 +63,19 @@ class DeliveryAddressWidget extends StatelessWidget {
             ],
           ),
           Spacer(),
-          ProfileWithBadge(
-            image: AssetImage('assets/images/profile.png'),
-            badgeCount: 3,
-          )
+          GestureDetector(
+            onTap: () async{
+              await SharedPreferencesHelper.setIsLog(false);
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => LoginScreen()),
+              );
+            },
+            child: ProfileWithBadge(
+              image: AssetImage('assets/images/profile.png'),
+              badgeCount: 3,
+            )
+          ),
         ],
       ),
     );

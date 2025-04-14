@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../../data/CartState.dart';
+import '../blocs/CartCubit.dart';
 import '../widgets/CartItemWidget.dart';
 import '../widgets/SummaryRow.dart';
-
-void main() {
-  runApp(MaterialApp(
-    home: CartScreen(),
-  ));
-}
+import 'HomeScreen.dart';
 
 class CartScreen extends StatelessWidget {
   const CartScreen({super.key});
@@ -21,34 +19,47 @@ class CartScreen extends StatelessWidget {
           Row(
             children: [
               SizedBox(width: 10),
-              Icon(
-                  Icons.arrow_back_ios,
-                  color: Colors.black
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(context, MaterialPageRoute(builder: (_) => HomeScreen()));
+                },
+                child: Icon(Icons.arrow_back_ios, color: Colors.black),
               ),
               Spacer(),
-              Text(
-                "Cart",
-                style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold
-                ),
-              ),
+              Text("Cart", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
               Spacer(),
               SizedBox(width: 24),
             ],
           ),
           SizedBox(height: 24),
-          CartItemWidget(
-            image: 'assets/images/pizza2.png',
-            name: 'Pizza margarita\nEuropean',
-            price: 9.00,
-            quantity: 2,
-          ),
-          CartItemWidget(
-            image: 'assets/images/pasta.png',
-            name: 'Spaghetti with\nshrimp and basil',
-            price: 15.30,
-            quantity: 2,
+          Expanded(
+            child: BlocBuilder<CartCubit, CartState>(
+              builder: (context, state) {
+                if (state.isLoading) {
+                  return Center(child: CircularProgressIndicator());
+                } else if (state.error != null) {
+                  return Center(child: Text('Error: ${state.error}'));
+                } else if (state.orders.isEmpty) {
+                  return Center(child: Text('No items in the cart.'));
+                } else {
+                  return ListView.builder(
+                    itemCount: state.orders.length,
+                    itemBuilder: (context, index) {
+                      final order = state.orders[index];
+                      return CartItemWidget(
+                        image: order['image_path'],
+                        name: order['item_name'],
+                        category: order['item_category'],
+                        quantity: order['quantity'],
+                        onDelete: () {
+                          context.read<CartCubit>().deleteOrder(order['id']);
+                        },
+                      );
+                    },
+                  );
+                }
+              },
+            ),
           ),
           SizedBox(height: 20),
           Row(
@@ -78,15 +89,8 @@ class CartScreen extends StatelessWidget {
                   ),
                 ),
                 child: Padding(
-                  padding:
-                  EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                  child: Text(
-                      "Add",
-                    style: TextStyle(
-                        color: Colors.white,
-                        fontSize: 16
-                    ),
-                  ),
+                  padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  child: Text("Add", style: TextStyle(color: Colors.white, fontSize: 16)),
                 ),
               ),
             ],
@@ -105,59 +109,33 @@ class CartScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                    "Delivery Address",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                        color: Colors.white)),
+                Text("Delivery Address", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white)),
                 SizedBox(height: 8),
-                Text(
-                  "Avinguda Meridiana, 350, 358, 08027\nBarcelona",
-                  style: TextStyle(color: Colors.white70, fontSize: 14),
-                ),
+                Text("Avinguda Meridiana, 350, 358, 08027\nBarcelona", style: TextStyle(color: Colors.white70, fontSize: 14)),
                 SizedBox(height: 20),
                 Row(
                   children: [
-                    Text(
-                      "Total ",
-                      style: TextStyle(color: Colors.white70, fontSize: 16),
-                    ),
-                    Text(
-                      "\$17.30",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 22),
-                    ),
+                    Text("Total ", style: TextStyle(color: Colors.white70, fontSize: 16)),
+                    Text("\$17.30", style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22)),
                     Spacer(),
                     ElevatedButton(
                       onPressed: () {},
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.deepOrange,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(30),
-                        ),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
                       ),
                       child: Padding(
                         padding: EdgeInsets.symmetric(horizontal: 24, vertical: 14),
-                        child: Text(
-                            "Go to checkout",
-                          style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 16
-                          ),
-                        ),
+                        child: Text("Go to checkout", style: TextStyle(color: Colors.white, fontSize: 16)),
                       ),
                     ),
                   ],
-                )
+                ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );
   }
 }
-
