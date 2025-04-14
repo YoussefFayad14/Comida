@@ -1,11 +1,11 @@
-import 'package:comida_app/presentation/screens/HomeScreen.dart';
-import 'package:comida_app/presentation/screens/LoginScreen.dart';
-import 'package:comida_app/presentation/screens/OnboardingScreen.dart';
-import 'package:comida_app/presentation/screens/SplashScreen.dart';
 import 'package:flutter/material.dart';
-import '../presentation/screens/CartScreen.dart';
-import '../presentation/screens/FoodDetailsScreen.dart';
-import '../presentation/screens/SignupScreen.dart';
+import '../features/screens/CartScreen.dart';
+import '../features/screens/FoodDetailsScreen.dart';
+import '../features/screens/HomeScreen.dart';
+import '../features/screens/LoginScreen.dart';
+import '../features/screens/OnboardingScreen.dart';
+import '../features/screens/SignupScreen.dart';
+import '../features/screens/SplashScreen.dart';
 import 'AppRoutes.dart';
 
 

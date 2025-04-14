@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:comida_app/presentation/screens/OnboardingScreen.dart';
-import 'package:comida_app/presentation/screens/HomeScreen.dart';
-
 import '../../util/SharedPreferencesHelper.dart';
+import 'HomeScreen.dart';
+import 'OnboardingScreen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
